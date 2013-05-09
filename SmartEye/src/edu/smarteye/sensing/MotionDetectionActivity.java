@@ -25,10 +25,11 @@ public class MotionDetectionActivity extends SensorsActivity {
 
     private static final String TAG = "MotionDetectionActivity";
     private int flag = 0;
-    static File f;
+    static File f,f1;
 	FileWriter filewriter;
-	static BufferedWriter out;
+	static BufferedWriter out,out1;
 	static int STATUS = 0;
+	static int STATUS1 = 0;
 	String TAG1 = "MotionDetection";
 	private static long lastStatusUpdate = 0;
 	private int lStatus = -1;
@@ -59,8 +60,22 @@ public class MotionDetectionActivity extends SensorsActivity {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}  
+		}
+		
         out = new BufferedWriter(filewriter);
+        
+        f1= new File(root.getAbsolutePath(), "camerastatus.txt");  
+        FileWriter filewriter1 = null;
+		try {
+			filewriter = new FileWriter(f1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        out1 = new BufferedWriter(filewriter1);
+        
+        
         flag = 1;
         
         
@@ -222,7 +237,9 @@ public class MotionDetectionActivity extends SensorsActivity {
                 if (img != null && detector.detect(img, width, height)) {
                 	
                 	STATUS = 1; //for communication purposes
+                	STATUS1 = 2;//for stoppin purposes
                 	lastStatusUpdate = System.currentTimeMillis();
+                	
                     
                     long now = System.currentTimeMillis();
                     if (now > (mReferenceTime + Preferences.PICTURE_DELAY)) {
@@ -262,6 +279,22 @@ public class MotionDetectionActivity extends SensorsActivity {
       	        	  {
       	        		  Log.e(TAG,"In camera "+e.getMessage());
       	        	  }
+                        
+                        
+                        try
+        	        	  {
+        	        		  File root = Environment.getExternalStorageDirectory();
+        	        		  f1= new File(root.getAbsolutePath(), "camerastatus.txt");  
+        	        		  FileWriter filewriter = new FileWriter(f1);  
+        	        		  out1 = new BufferedWriter(filewriter);
+        	        		  out1.write("FLAG"+STATUS1);
+        	        		  out1.close();
+        	        	  }
+        	        	  catch(Exception e)
+        	        	  {
+        	        		  Log.e(TAG,"In camera "+e.getMessage());
+        	        	  }
+                        
 
                         Log.i(TAG, "Saving.. previous=" + previous + " original=" + original + " bitmap=" + bitmap);
                         Looper.prepare();
@@ -269,6 +302,8 @@ public class MotionDetectionActivity extends SensorsActivity {
                     } else {
                         Log.i(TAG, "Not taking picture because not enough time has passed since the creation of the Surface");
                     }
+                    
+                   // onPause();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -328,5 +363,9 @@ public class MotionDetectionActivity extends SensorsActivity {
             }
         }
     }
+    
+   
+    
+    
 }
 
