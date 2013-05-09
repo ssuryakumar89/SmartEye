@@ -30,6 +30,8 @@ public class MotionDetectionActivity extends SensorsActivity {
 	static BufferedWriter out;
 	static int STATUS = 0;
 	String TAG1 = "MotionDetection";
+	private static long lastStatusUpdate = 0;
+	private int lStatus = -1;
 
     private static SurfaceView preview = null;
     private static SurfaceHolder previewHolder = null;
@@ -220,6 +222,7 @@ public class MotionDetectionActivity extends SensorsActivity {
                 if (img != null && detector.detect(img, width, height)) {
                 	
                 	STATUS = 1; //for communication purposes
+                	lastStatusUpdate = System.currentTimeMillis();
                     
                     long now = System.currentTimeMillis();
                     if (now > (mReferenceTime + Preferences.PICTURE_DELAY)) {
@@ -276,10 +279,26 @@ public class MotionDetectionActivity extends SensorsActivity {
 
             processing.set(false);
             time = System.currentTimeMillis();
-        /*    while(System.currentTimeMillis() < time + 60000L){
-            	STATUS = 1;
-            }
-            STATUS = 0; */
+            
+            if((time - lastStatusUpdate) > 60000 || lastStatusUpdate == 0){
+            	try
+				 {
+            		 STATUS = 0;
+					 File root = Environment.getExternalStorageDirectory();
+					 File f= new File(root.getAbsolutePath(), "status.txt");  
+					 FileWriter filewriter = new FileWriter(f);  
+					 BufferedWriter out = new BufferedWriter(filewriter);
+					 out.write("FLAG"+STATUS);
+					 out.close();
+					 Log.i(TAG,"No detection in a minute "+STATUS);
+				 }catch (Exception e)
+				 {
+					 Log.e(TAG, "In camera detection "+e.getMessage());
+				 }
+				 lastStatusUpdate = time;
+				// lastStatus = STATUS;
+            } 
+       
             
         }
     };
