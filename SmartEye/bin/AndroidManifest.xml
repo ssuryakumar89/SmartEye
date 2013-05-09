@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <uses-feature android:name="android.hardware.camera.autofocus" />
        
     
@@ -36,6 +37,26 @@
             </intent-filter>
       	    
       	</activity>
+		<activity
+			android:name=".Video_Stream"
+      	    android:label="Stream">
+      	    <intent-filter>
+                <action android:name="edu.smarteye.sensing.Video_Stream" />
+                
+                <category android:name="android.intent.category.LAUNCHER" />
+				
+            </intent-filter>
+		</activity>
+		<activity
+			android:name=".VideoRecorder"
+      	    android:label="RecordVideo">
+      	    <intent-filter>
+                <action android:name="edu.smarteye.sensing.VideoRecorder" />
+                
+                <category android:name="android.intent.category.LAUNCHER" />
+				
+            </intent-filter>
+		</activity>
       	<activity 
       	    android:name=".MotionDetectionActivity"
             android:label="camera" >

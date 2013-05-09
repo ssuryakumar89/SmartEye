@@ -1,13 +1,12 @@
 package edu.smarteye.sensing;
 
 import java.io.IOException;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,7 +15,7 @@ public class VideoRecorder extends Activity implements SurfaceHolder.Callback
 {
 	String TAG ="VideoRecorder";
 	String videofolder = android.os.Environment.getExternalStorageDirectory()+"/Record/";
-	private final String VIDEO_PATH_NAME = videofolder+"test.mp4";
+	private final String VIDEO_PATH_NAME = videofolder+"test"+Long.toString(System.currentTimeMillis());
 	private MediaRecorder mMediaRecorder;
 	private Camera mCamera;
 	private SurfaceView mSurfaceView;
@@ -103,13 +102,9 @@ public class VideoRecorder extends Activity implements SurfaceHolder.Callback
 	
 	private void shutdown() 
 	{
-	    // Release MediaRecorder and especially the Camera as it's a shared
-	    // object that can be used by other applications
 	    mMediaRecorder.reset();
 	    mMediaRecorder.release();
 	    mCamera.release();
-	
-	    // once the objects have been released they can't be reused
 	    mMediaRecorder = null;
 	    mCamera = null;
 	}
