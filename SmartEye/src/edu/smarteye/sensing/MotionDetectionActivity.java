@@ -67,7 +67,7 @@ public class MotionDetectionActivity extends SensorsActivity {
         f1= new File(root.getAbsolutePath(), "camerastatus.txt");  
         FileWriter filewriter1 = null;
 		try {
-			filewriter = new FileWriter(f1);
+			filewriter1 = new FileWriter(f1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
