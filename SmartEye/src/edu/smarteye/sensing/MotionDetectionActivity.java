@@ -6,9 +6,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import edu.smarteye.sensing.*;
-
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
@@ -29,7 +26,7 @@ public class MotionDetectionActivity extends SensorsActivity {
 	FileWriter filewriter;
 	static BufferedWriter out,out1;
 	static int STATUS = 0;
-	static int STATUS1 = 0;
+	static int STATUS1 = 1;
 	String TAG1 = "MotionDetection";
 	private static long lastStatusUpdate = 0;
 	private int lStatus = -1;
@@ -47,15 +44,17 @@ public class MotionDetectionActivity extends SensorsActivity {
     /**
      * {@inheritDoc}
      */
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) 
+    {
+    	Log.v("Came ","here");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        
+        Log.v("Starting","Camera");
         File root = Environment.getExternalStorageDirectory();
 		f= new File(root.getAbsolutePath(), "status.txt");  
         FileWriter filewriter = null;
-		try {
+		try 
+		{
 			filewriter = new FileWriter(f);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -63,7 +62,6 @@ public class MotionDetectionActivity extends SensorsActivity {
 		}
 		
         out = new BufferedWriter(filewriter);
-        
         f1= new File(root.getAbsolutePath(), "camerastatus.txt");  
         FileWriter filewriter1 = null;
 		try {
@@ -72,15 +70,19 @@ public class MotionDetectionActivity extends SensorsActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-        out1 = new BufferedWriter(filewriter1);
+		out1 = new BufferedWriter(filewriter1);
         
         
         flag = 1;
         
         
         preview = (SurfaceView) findViewById(R.id.preview);
+        if(preview==null)
+        	Log.v("Preview","is null");
+        
         previewHolder = preview.getHolder();
+        if(previewHolder==null)
+        	Log.v("Preview Holder","is null");
         previewHolder.addCallback(surfaceCallback);
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 

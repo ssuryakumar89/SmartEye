@@ -15,7 +15,7 @@ public class VideoRecorder extends Activity implements SurfaceHolder.Callback
 {
 	String TAG ="VideoRecorder";
 	String videofolder = android.os.Environment.getExternalStorageDirectory()+"/Record/";
-	private final String VIDEO_PATH_NAME = videofolder+"test"+Long.toString(System.currentTimeMillis());
+	private final String VIDEO_PATH_NAME = videofolder+"test"+Long.toString(System.currentTimeMillis())+".mp4";
 	private MediaRecorder mMediaRecorder;
 	private Camera mCamera;
 	private SurfaceView mSurfaceView;

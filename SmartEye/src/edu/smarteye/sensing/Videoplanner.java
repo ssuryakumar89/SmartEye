@@ -1,15 +1,21 @@
 package edu.smarteye.sensing;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -103,9 +109,50 @@ public class Videoplanner extends PeriodicTask
 		appl.startActivity(dialogIntent);
 	}	
 	
+	public void record_and_upload()
+	{
+		//send_sms(phoneno,conf_msg);
+		Log.v(tag,"Recording video");
+		for(int i =0;i<10;i++)
+		{
+			record();
+			if(i==2)
+			{
+				try 
+				{
+					Thread.sleep(200);
+					upload_video();
+				} 
+				catch (InterruptedException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try 
+			{
+				Thread.sleep(200);
+			} 
+			catch (InterruptedException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
+	}
+	
 	public boolean get_turk_result()
 	{
 		return false;
+	}
+	
+	public String hitturk()
+	{
+
+		String id = new Hitturk().execute(myURL,0,"");
+		Log.v("Got id ",id);
+		return id;
 	}
 	
 	
@@ -140,10 +187,10 @@ public class Videoplanner extends PeriodicTask
 						Log.v(tag,"Flag is 1");
 						local_record_status = true;
 						//send_sms(phoneno,alert_msg);
-						// hitturk
-						start_streaming();
+						String id = hitturk();
+						//start_streaming();
+						record_and_upload();
 						Long start = System.currentTimeMillis();
-						//start(video)
 						Long time_elapsed = (long) 0;
 						Log.v(tag,"Came here");
 						while(time_elapsed<60000 || get_turk_result()==true){time_elapsed = System.currentTimeMillis()-start;}
@@ -151,19 +198,21 @@ public class Videoplanner extends PeriodicTask
 						{
 							Log.v(tag,"Got result");
 						}
-							//delete all the videos
-						if(get_turk_result()==false)
-						{
-							ActivityManager am = (ActivityManager) context.
-						            getSystemService(Activity.ACTIVITY_SERVICE);
-							am.killBackgroundProcesses("com.bambuser.broadcaster");
-							//send_sms(phoneno,conf_msg);
-							Log.v(tag,"Going to kill all the activities");
-							//android.os.Process.killProcess(android.os.Process.myPid());
-							Log.v(tag,"Recording video");
-							for(int i =0;i<10;i++)
-								 record();
-						}
+							
+						
+						try
+      	        	  {
+      	        		  File root1 = Environment.getExternalStorageDirectory();
+      	        		  File f1 = new File(root1.getAbsolutePath(), "camerastatus.txt");  
+      	        		  FileWriter filewriter = new FileWriter(f1);  
+      	        		  BufferedWriter out1 = new BufferedWriter(filewriter);
+      	        		  out1.write("FLAG"+"1");
+      	        		  out1.close();
+      	        	  }
+      	        	  catch(Exception e)
+      	        	  {
+      	        		  Log.e(TAG,"In camera "+e.getMessage());
+      	        	  }
 					}
 					else
 						Log.v(tag,"Flag is 0");

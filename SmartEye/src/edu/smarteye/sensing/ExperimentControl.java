@@ -37,11 +37,19 @@ public class ExperimentControl extends Service
 		
 
 		Log.v("Service","Started");
-
-		/*Intent dialogIntent = new Intent(getBaseContext(), MotionDetectionActivity.class);
+		Log.v("Starting","CameraAct");
+		try
+		{
+		Intent dialogIntent = new Intent(this, MotionDetectionActivity.class);
 		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		getApplication().startActivity(dialogIntent);*/
-		
+		getApplication().startActivity(dialogIntent);
+		Log.v("Camera","launched");
+		}
+		catch(Exception e)
+		{
+			Log.v("Error","here");
+			e.printStackTrace();
+		}
 		try 
 		{
 			motionCheck = new SenseMotion(getApplicationContext());

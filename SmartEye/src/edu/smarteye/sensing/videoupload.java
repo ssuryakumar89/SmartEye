@@ -1,58 +1,105 @@
 package edu.smarteye.sensing;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
+
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class videoupload extends AsyncTask<URL,Integer,Long>
 {
 	String videofolder = android.os.Environment.getExternalStorageDirectory()+"/Record/";
-	private final String VIDEO_PATH_NAME = videofolder+"test.mp4";
-
 	@Override
 	protected Long doInBackground(URL... url) 
 	{
-		   String location = VIDEO_PATH_NAME;
-		   String hostName = "ec2-54-224-254-71.compute-1.amazonaws.com";
-		   String username = "testuser";
-		   String password = "testuser";
-		   FTPClient ftp = null;
-
-	        InputStream in = null;
-	        try 
-	        {
-	        	
-	            ftp = new FTPClient();
-	            ftp.connect(hostName);
-	            ftp.enterLocalPassiveMode();
-	            ftp.login(username, password);
-	            ftp.setFileType(FTP.BINARY_FILE_TYPE);
-	            ftp.changeWorkingDirectory("/uploads");
-	            int reply = ftp.getReplyCode();
-	            Log.v("Received Reply from FTP Connection:" ,Integer.toString(reply));
-	            if (FTPReply.isPositiveCompletion(reply)) 
-	            {
-	                System.out.println("Connected Success");
-	            }
-
-	            File f1 = new File(location);
-	            in = new FileInputStream(f1);
-	            ftp.storeFile(VIDEO_PATH_NAME, in);
-	            ftp.logout();
-	            ftp.disconnect();
-	        }
-			catch(Exception ex)
-			{
-			     ex.printStackTrace();
-			}
-			return null;
+		   File dir = new File(videofolder);
+		   FileFilter fileFilter = new WildcardFileFilter("*.mp4");
+		   File[] files = dir.listFiles(fileFilter);
+		   for(int j = 0 ; j< files.length ;j++)
+		   {
+			   Log.v("Files",files[j].toString());
+			   upload(files[j].toString());
+		   }
+		   
+		   return null;
 			
+	}
+	
+	public void upload(String location)
+	{
+		   String hostName = "http://ec2-54-224-254-71.compute-1.amazonaws.com";
+		   HttpURLConnection connection = null;
+		   DataOutputStream outputStream = null;
+		   String urlServer = hostName+"/handle_upload.php";
+		   String lineEnd = "\r\n";
+		   String twoHyphens = "--";
+		   String boundary =  "*****";
+		   int bytesRead, bytesAvailable, bufferSize;
+		   byte[] buffer;
+		   int maxBufferSize = 1*1024*1024;
+		   try
+		   {
+		   FileInputStream fileInputStream = new FileInputStream(new File(location) );
+
+		   URL urls = new URL(urlServer);
+		   connection = (HttpURLConnection) urls.openConnection();
+
+		   // Allow Inputs & Outputs
+		   connection.setDoInput(true);
+		   connection.setDoOutput(true);
+		   connection.setUseCaches(false);
+
+		   // Enable POST method
+		   connection.setRequestMethod("POST");
+
+		   connection.setRequestProperty("Connection", "Keep-Alive");
+		   connection.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+
+		   outputStream = new DataOutputStream( connection.getOutputStream() );
+		   outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+		   outputStream.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + location +"\"" + lineEnd);
+		   outputStream.writeBytes(lineEnd);
+
+		   bytesAvailable = fileInputStream.available();
+		   bufferSize = Math.min(bytesAvailable, maxBufferSize);
+		   buffer = new byte[bufferSize];
+
+		   // Read file
+		   bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+		   while (bytesRead > 0)
+		   {
+		   outputStream.write(buffer, 0, bufferSize);
+		   bytesAvailable = fileInputStream.available();
+		   bufferSize = Math.min(bytesAvailable, maxBufferSize);
+		   bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+		   }
+
+		   outputStream.writeBytes(lineEnd);
+		   outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+		   // Responses from the server (code and message)
+		   int serverResponseCode = connection.getResponseCode();
+		   String serverResponseMessage = connection.getResponseMessage();
+		   Log.v("Upload",Integer.toString(serverResponseCode));
+		   Log.v("Upload",serverResponseMessage);
+
+		   fileInputStream.close();
+		   outputStream.flush();
+		   outputStream.close();
+		   }
+		   catch (Exception ex)
+		   {
+			   ex.printStackTrace();
+		   Log.v("Upload","Error");
+		   }
+		   
 	}
 
 }
