@@ -38,6 +38,7 @@ public class MotionDetectionActivity extends SensorsActivity {
     private static long mReferenceTime = 0;
     private static IMotionDetection detector = null;
     private static long time = 0;
+    Preferences p;
 
     private static volatile AtomicBoolean processing = new AtomicBoolean(false);
 
@@ -50,6 +51,7 @@ public class MotionDetectionActivity extends SensorsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Log.v("Starting","Camera");
+        p = new Preferences();
         File root = Environment.getExternalStorageDirectory();
 		f= new File(root.getAbsolutePath(), "status.txt");  
         FileWriter filewriter = null;
@@ -86,10 +88,10 @@ public class MotionDetectionActivity extends SensorsActivity {
         previewHolder.addCallback(surfaceCallback);
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-        if (Preferences.USE_RGB) {
+        if (p.USE_RGB) {
             detector = new RgbMotionDetection();
         }
-        else if (Preferences.USE_LUMA) {
+        else if (p.USE_LUMA) {
             detector = new LumaMotionDetection();
         } 
         else {
@@ -203,11 +205,13 @@ public class MotionDetectionActivity extends SensorsActivity {
         private byte[] data;
         private int width;
         private int height;
+        Preferences p;
 
         public DetectionThread(byte[] data, int width, int height) {
             this.data = data;
             this.width = width;
             this.height = height;
+            p = new Preferences();
         }
 
                 
@@ -218,12 +222,12 @@ public class MotionDetectionActivity extends SensorsActivity {
             try {
                 // Previous frame
                 int[] pre = null;
-                if (Preferences.SAVE_PREVIOUS) pre = detector.getPrevious();
+                if (p.SAVE_PREVIOUS) pre = detector.getPrevious();
 
                 // Current frame (with changes)
                 // long bConversion = System.currentTimeMillis();
                 int[] img = null;
-                if (Preferences.USE_RGB) {
+                if (p.USE_RGB) {
                     img = ImageProcessing.decodeYUV420SPtoRGB(data, width, height);
                 } else {
                     img = ImageProcessing.decodeYUV420SPtoLuma(data, width, height);
@@ -233,7 +237,7 @@ public class MotionDetectionActivity extends SensorsActivity {
 
                 // Current frame (without changes)
                 int[] org = null;
-                if (Preferences.SAVE_ORIGINAL && img != null) org = img.clone();
+                if (p.SAVE_ORIGINAL && img != null) org = img.clone();
 
                 if (img != null && detector.detect(img, width, height)) {
                 	
@@ -247,21 +251,21 @@ public class MotionDetectionActivity extends SensorsActivity {
                         mReferenceTime = now;
 
                         Bitmap previous = null;
-                        if (Preferences.SAVE_PREVIOUS && pre != null) {
-                            if (Preferences.USE_RGB) previous = ImageProcessing.rgbToBitmap(pre, width, height);
+                        if (p.SAVE_PREVIOUS && pre != null) {
+                            if (p.USE_RGB) previous = ImageProcessing.rgbToBitmap(pre, width, height);
                             else previous = ImageProcessing.lumaToGreyscale(pre, width, height);
                         }
 
                         Bitmap original = null;
-                        if (Preferences.SAVE_ORIGINAL && org != null) {
-                            if (Preferences.USE_RGB) original = ImageProcessing.rgbToBitmap(org, width, height);
+                        if (p.SAVE_ORIGINAL && org != null) {
+                            if (p.USE_RGB) original = ImageProcessing.rgbToBitmap(org, width, height);
                             else original = ImageProcessing.lumaToGreyscale(org, width, height);
 
                         }
 
                         Bitmap bitmap = null;
-                        if (Preferences.SAVE_CHANGES && img != null) {
-                            if (Preferences.USE_RGB) bitmap = ImageProcessing.rgbToBitmap(img, width, height);
+                        if (p.SAVE_CHANGES && img != null) {
+                            if (p.USE_RGB) bitmap = ImageProcessing.rgbToBitmap(img, width, height);
                             else bitmap = ImageProcessing.lumaToGreyscale(img, width, height);
 
                         }

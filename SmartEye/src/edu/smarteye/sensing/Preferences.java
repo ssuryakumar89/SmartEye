@@ -13,7 +13,7 @@ public class Preferences {
 	
 	//option on what methods to use..can be extended to UI
 
-    private Preferences() {
+    public Preferences() {
     	try
 		{
 			File config = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"config.txt");
@@ -26,7 +26,10 @@ public class Preferences {
 				{
 					
 					if (s.contains("Phone:"))
-						number = br.readLine();
+					{
+						String str[] = s.split(":");
+						number = str[1];
+					}
 					else
 					if (s.contains("P:false"))
 						SAVE_PREVIOUS = false;
@@ -58,21 +61,21 @@ public class Preferences {
     }
 
     // Which motion detection to use
-    public static boolean USE_RGB = true;
-    public static boolean USE_LUMA = true;
-    public static boolean USE_STATE = true;
+    public boolean USE_RGB = true;
+    public boolean USE_LUMA = true;
+    public boolean USE_STATE = true;
 
     // Which photos to save
-    public static boolean SAVE_PREVIOUS = true;
-    public static boolean SAVE_ORIGINAL = true;
-    public static boolean SAVE_CHANGES = true;
+    public boolean SAVE_PREVIOUS = true;
+    public boolean SAVE_ORIGINAL = true;
+    public boolean SAVE_CHANGES = true;
     
     //video preferences
-    public static boolean RECORD = true;
-    public static boolean LIVE = true;
+    public boolean RECORD = true;
+    public boolean LIVE = true;
     
     //messaging preferences
-    public static String number= "";
+    public String number= "";
 
 
     // Time between saving photos

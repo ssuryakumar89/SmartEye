@@ -39,11 +39,12 @@ public class Videoplanner extends PeriodicTask
 	private String URL_String = "ftp://ec2-50-17-179-124.compute-1.amazonaws.com";
 	URL myURL;
 	Application appl;
-	String phoneno = "+1"+Preferences.number;
+	String phoneno = " "; 
 	
 	String alert_msg = "Possible intrusion. Hit raised";
 	String conf_msg = "Confirm";
 	String tag = "Videoplanner";
+	Preferences p;
 	
 	public Videoplanner(Context ctxt, String logTag,Application app,Long interval) throws NoSuchAlgorithmException 
 	{
@@ -58,7 +59,8 @@ public class Videoplanner extends PeriodicTask
 		Log.v("VideoPlanner","Constructor");
 		Log.v(tag,Integer.toString(android.os.Process.myPid()));
 		Log.v("Phone",phoneno);
-		
+		p = new Preferences();
+		phoneno = "+1"+p.number;		
 	}
 	
 	@Override
@@ -124,7 +126,7 @@ public class Videoplanner extends PeriodicTask
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		for(int i =0;i<10;i++)
+		for(int i =0;i<50;i++)
 		{
 			
 			record();
@@ -207,11 +209,12 @@ public class Videoplanner extends PeriodicTask
 						Log.v(tag,"Flag is 1");
 						local_record_status = true;
 						send_sms(phoneno,alert_msg);
-						Log.v(Boolean.toString(Preferences.RECORD),Boolean.toString(Preferences.LIVE));
-						if(Preferences.RECORD && !Preferences.LIVE)
+						Log.v(Boolean.toString(p.RECORD),Boolean.toString(p.LIVE));
+						Log.v(TAG,p.number);
+						if(p.RECORD && !p.LIVE)
 							record_and_upload();
 						else
-						if(Preferences.LIVE)
+						if(p.LIVE)
 						{
 							hitturk();
 							start_streaming();
