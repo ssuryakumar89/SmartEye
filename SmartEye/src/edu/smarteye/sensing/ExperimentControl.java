@@ -71,7 +71,7 @@ public class ExperimentControl extends Service
 		{
 			Log.v("Video","Starting video_recording");
 			app = getApplication();
-			vrecorder = new Videoplanner(getApplicationContext(),"abcd",app,30000L);
+			vrecorder = new Videoplanner(getApplicationContext(),"abcd",app,15000L);
 			vrecorder.start();
 		} 
 		catch (NoSuchAlgorithmException e1) 

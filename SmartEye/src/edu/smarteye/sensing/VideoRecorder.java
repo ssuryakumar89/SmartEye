@@ -91,7 +91,7 @@ public class VideoRecorder extends Activity implements SurfaceHolder.Callback
 		mMediaRecorder.start();
 	    try 
 	    {
-	        Thread.sleep(10 * 1000);
+	        Thread.sleep(35 * 1000);
 	    } 
 	    catch (Exception e) 
 	    {

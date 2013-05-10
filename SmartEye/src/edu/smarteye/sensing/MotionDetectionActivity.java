@@ -127,15 +127,14 @@ public class MotionDetectionActivity extends SensorsActivity {
     
     public void onResume() {
         super.onResume();
-
-        camera = Camera.open();
+        if(camera==null)
+        	camera = Camera.open();
     }
 
     private PreviewCallback previewCallback = new PreviewCallback() {
-
        
-        
-        public void onPreviewFrame(byte[] data, Camera cam) {
+        public void onPreviewFrame(byte[] data, Camera cam) 
+        {
             if (data == null) return;
             Camera.Size size = cam.getParameters().getPreviewSize();
             if (size == null) return;
@@ -147,12 +146,12 @@ public class MotionDetectionActivity extends SensorsActivity {
         }
     };
 
-    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
-
-        
+    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() 
+    {       
         
         public void surfaceCreated(SurfaceHolder holder) {
-            try {
+            try {Thread.sleep(7000);
+            	//camera = Camera.open();
                 camera.setPreviewDisplay(previewHolder);
                 camera.setPreviewCallback(previewCallback);
             } catch (Throwable t) {

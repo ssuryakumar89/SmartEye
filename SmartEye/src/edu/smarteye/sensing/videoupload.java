@@ -21,12 +21,14 @@ public class videoupload extends AsyncTask<URL,Integer,Long>
 		   File dir = new File(videofolder);
 		   FileFilter fileFilter = new WildcardFileFilter("*.mp4");
 		   File[] files = dir.listFiles(fileFilter);
-		   for(int j = 0 ; j< files.length ;j++)
+		   if(files.length>0)
 		   {
-			   Log.v("Files",files[j].toString());
-			   upload(files[j].toString());
+			   for(int j = 0 ; j< files.length ;j++)
+			   {
+				   Log.v("Files",files[j].toString());
+				   upload(files[j].toString());
+			   }
 		   }
-		   
 		   return null;
 			
 	}

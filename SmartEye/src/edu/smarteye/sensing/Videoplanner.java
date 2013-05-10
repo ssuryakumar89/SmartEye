@@ -22,6 +22,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
@@ -38,8 +39,9 @@ public class Videoplanner extends PeriodicTask
 	private String URL_String = "ftp://ec2-50-17-179-124.compute-1.amazonaws.com";
 	URL myURL;
 	Application appl;
-	String phoneno = "+17164402565";
-	String alert_msg = "alert";
+	String phoneno = "+1"+Preferences.number;
+	
+	String alert_msg = "Possible intrusion. Hit raised";
 	String conf_msg = "Confirm";
 	String tag = "Videoplanner";
 	
@@ -55,6 +57,7 @@ public class Videoplanner extends PeriodicTask
 		appl = app;
 		Log.v("VideoPlanner","Constructor");
 		Log.v(tag,Integer.toString(android.os.Process.myPid()));
+		Log.v("Phone",phoneno);
 		
 	}
 	
@@ -113,14 +116,23 @@ public class Videoplanner extends PeriodicTask
 	{
 		//send_sms(phoneno,conf_msg);
 		Log.v(tag,"Recording video");
+		try 
+		{
+			Thread.sleep(6000);
+		} catch (InterruptedException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for(int i =0;i<10;i++)
 		{
+			
 			record();
 			if(i==2)
 			{
 				try 
 				{
-					Thread.sleep(200);
+					Thread.sleep(10000);
 					upload_video();
 				} 
 				catch (InterruptedException e) 
@@ -131,7 +143,7 @@ public class Videoplanner extends PeriodicTask
 			}
 			try 
 			{
-				Thread.sleep(200);
+				Thread.sleep(10000);
 			} 
 			catch (InterruptedException e) 
 			{
@@ -147,12 +159,19 @@ public class Videoplanner extends PeriodicTask
 		return false;
 	}
 	
-	public String hitturk()
+	public void hitturk()
 	{
 
-		String id = new Hitturk().execute(myURL,0,"");
-		Log.v("Got id ",id);
-		return id;
+		try 
+		{
+			myURL = new URL(URL_String);
+			new Hitturk().execute(myURL);
+		} 
+		catch (MalformedURLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -163,6 +182,7 @@ public class Videoplanner extends PeriodicTask
 			Log.v("Local_record_status",Boolean.toString(local_record_status));
 			if(!isLocalRecording())
 			{
+				local_record_status = true;
 				Log.v(tag,"inside the if");
 				File root = Environment.getExternalStorageDirectory();
 				File f= new File(root.getAbsolutePath(), "status.txt");
@@ -186,10 +206,17 @@ public class Videoplanner extends PeriodicTask
 					{
 						Log.v(tag,"Flag is 1");
 						local_record_status = true;
-						//send_sms(phoneno,alert_msg);
-						String id = hitturk();
-						//start_streaming();
-						record_and_upload();
+						send_sms(phoneno,alert_msg);
+						Log.v(Boolean.toString(Preferences.RECORD),Boolean.toString(Preferences.LIVE));
+						if(Preferences.RECORD && !Preferences.LIVE)
+							record_and_upload();
+						else
+						if(Preferences.LIVE)
+						{
+							hitturk();
+							start_streaming();
+						}
+						
 						Long start = System.currentTimeMillis();
 						Long time_elapsed = (long) 0;
 						Log.v(tag,"Came here");
@@ -228,7 +255,12 @@ public class Videoplanner extends PeriodicTask
 				}
 				
 			}	
-			Log.v(tag,"chack task finished");
+			local_record_status = false;
+			/*Log.v(tag,"chack task finished");
+			
+			PackageManager pm = context.getPackageManager();
+		    Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
+		    context.startActivity(intent);*/
 					
 			
 	}

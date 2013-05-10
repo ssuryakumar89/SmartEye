@@ -24,6 +24,10 @@ public class Preferences {
 				Log.i(TAG1,s);
 				if((s = s.trim()).length() > 0)
 				{
+					
+					if (s.contains("Phone:"))
+						number = br.readLine();
+					else
 					if (s.contains("P:false"))
 						SAVE_PREVIOUS = false;
 					else if(s.contains("N:false"))
@@ -36,12 +40,16 @@ public class Preferences {
 						USE_LUMA = false;
 					else if(s.contains("M:false"))
 						USE_STATE = false;
+					else if(s.contains("U:false"))
+						RECORD = false;
+					else if(s.contains("V:false"))
+						LIVE = false;
 				}
 			}
 			br.close();
 			Log.d(TAG1,"Save Previous = "+SAVE_PREVIOUS+" Save Original = "+SAVE_ORIGINAL+
 					" Save Changes = "+SAVE_CHANGES+"RGB ="+ USE_RGB + "LUMA ="+ USE_LUMA
-					+"STATE ="+ USE_STATE);
+					+"STATE ="+ USE_STATE +"RECORD ="+ RECORD + "LIVE STREAM ="+ LIVE);
 			
 		}catch(Exception e)
 		{
@@ -58,6 +66,14 @@ public class Preferences {
     public static boolean SAVE_PREVIOUS = true;
     public static boolean SAVE_ORIGINAL = true;
     public static boolean SAVE_CHANGES = true;
+    
+    //video preferences
+    public static boolean RECORD = true;
+    public static boolean LIVE = true;
+    
+    //messaging preferences
+    public static String number= "";
+
 
     // Time between saving photos
     public static int PICTURE_DELAY = 10000;

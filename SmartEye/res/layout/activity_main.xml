@@ -20,55 +20,12 @@
         android:layout_y="376dp"
         android:text="Stop Service" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="128dp"
-        android:layout_y="343dp"
-        android:text="Status: " />
-    
-    
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_x="86dp"
-        android:layout_y="41dp"
-        android:text="Surveillance Knobs"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <CheckBox
-        android:id="@+id/checkAccel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_x="4dp"
-        android:layout_y="70dp"
-        android:text="Accelerometer" />
-
-    <CheckBox
-        android:id="@+id/checkSound"
-        android:layout_width="316dp"
-        android:layout_height="wrap_content"
-        android:layout_x="4dp"
-        android:layout_y="97dp"
-        android:text="Sound Amplitude" />
-
-    <CheckBox
-        android:id="@+id/checkGyro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_x="4dp"
-        android:layout_y="126dp"
-        android:text="Gyroscope" />
-
     <CheckBox
         android:id="@+id/use_RGB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="4dp"
-        android:layout_y="184dp"
+        android:layout_y="124dp"
         android:text="Use RGB" />
 
     <CheckBox
@@ -76,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="4dp"
-        android:layout_y="212dp"
+        android:layout_y="152dp"
         android:text="Use LUMA" />
 
     <CheckBox
@@ -84,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="4dp"
-        android:layout_y="240dp"
+        android:layout_y="180dp"
         android:text="Use STATE" />
 
     <CheckBox
@@ -92,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="164dp"
-        android:layout_y="212dp"
+        android:layout_y="152dp"
         android:text="Save Changes" />
 
     <CheckBox
@@ -100,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="164dp"
-        android:layout_y="240dp"
+        android:layout_y="180dp"
         android:text="Save Original" />
 
     <CheckBox
@@ -108,24 +65,110 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_x="164dp"
-        android:layout_y="184dp"
+        android:layout_y="124dp"
         android:text="Save Previous" />
+        
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="48dp"
-        android:layout_y="167dp"
-        android:text="Camera Surveillance Knobs"
+        android:layout_x="126dp"
+        android:layout_y="355dp"
+        android:text="Status: " />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="77dp"
+        android:layout_y="8dp"
+        android:text="Surveillance Knobs"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/checkAccel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="0dp"
+        android:layout_y="33dp"
+        android:text="Accelerometer" />
+
+    <CheckBox
+        android:id="@+id/checkSound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="140dp"
+        android:layout_y="33dp"
+        android:text="Sound Amplitude" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="18dp"
-        android:layout_y="281dp"
+        android:layout_x="17dp"
+        android:layout_y="214dp"
         android:text="Choose any one" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="110dp"
+        android:layout_y="238dp"
+        android:text="Video Knobs"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/checkGyro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="86dp"
+        android:layout_y="54dp"
+        android:text="Gyroscope" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="44dp"
+        android:layout_y="88dp"
+        android:text="Camera Surveillance Knobs"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/record"
+        android:layout_width="168dp"
+        android:layout_height="wrap_content"
+        android:layout_x="4dp"
+        android:layout_y="257dp"
+        android:text="Record &amp; Upload" />
+
+    <CheckBox
+        android:id="@+id/stream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="173dp"
+        android:layout_y="257dp"
+        android:text="Live Stream" />
+
+   
+    <EditText
+    android:id="@+id/edit"
+    android:layout_width="match_parent"
+    android:layout_height="36dp"
+    android:layout_x="7dp"
+    android:layout_y="317dp"
+    android:inputType="phone"
+    android:imeOptions="actionSend" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="56dp"
+        android:layout_y="295dp"
+        android:text="Enter alert device number"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </AbsoluteLayout>

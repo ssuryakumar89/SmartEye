@@ -175,9 +175,9 @@ public class SenseMotion implements SensorEventListener{
 								mRecorder.getMaxAmplitude();
 								mRecorder.stop();
 								soundLevel = mRecorder.getMaxAmplitude();
-								if (SoundFLAG == true && AcceFLAG == false)
+								if (SoundFLAG == true )
 								{
-									if(soundLevel > 1000)
+									if(soundLevel > 800)
 										STATUS = 1;
 									else
 										STATUS = 0;

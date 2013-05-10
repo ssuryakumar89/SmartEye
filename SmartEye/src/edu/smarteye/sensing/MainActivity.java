@@ -16,8 +16,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -34,7 +36,10 @@ public class MainActivity extends Activity {
 	CheckBox save_prev;
 	CheckBox save_normal;
 	CheckBox save_change;
-
+	CheckBox record;
+	CheckBox stream;
+	EditText edit;
+	
 	String TAG = "SmartEye";
 	Timer readTask = null;
 	
@@ -56,9 +61,13 @@ public class MainActivity extends Activity {
         rgb = (CheckBox)findViewById(R.id.use_RGB);
         luma = (CheckBox)findViewById(R.id.use_LUMA);
         state = (CheckBox)findViewById(R.id.use_STATE);
-        
+        record = (CheckBox)findViewById(R.id.record);
+        stream = (CheckBox)findViewById(R.id.stream);
+        edit = (EditText)findViewById(R.id.edit);
         
         final Intent serviceIntent = new Intent(getApplicationContext(),ExperimentControl.class );
+        
+        
         
         
         start.setOnClickListener(new OnClickListener(){
@@ -80,6 +89,9 @@ public class MainActivity extends Activity {
 			    	out.write("R:"+rgb.isChecked()+"\n");
 			    	out.write("L:"+luma.isChecked()+"\n");
 			    	out.write("M:"+state.isChecked()+"\n");
+			    	out.write("U:"+record.isChecked()+"\n");
+			    	out.write("V:"+stream.isChecked()+"\n");
+			    	out.write("Phone:"+edit.getText().toString() +"\n");
 			    	out.close();
 		    	
 		        }catch(Exception e)
